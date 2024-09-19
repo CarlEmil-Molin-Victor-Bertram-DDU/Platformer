@@ -1,0 +1,28 @@
+[gd_scene load_steps=6 format=3 uid="uid://jfw3c5yhtcju"]
+
+[ext_resource type="Script" path="res://scripts/Coinarea.gd" id="1_vtmnb"]
+[ext_resource type="Texture2D" uid="uid://el0hjjy2ipyv" path="res://resources/Coin.png" id="2_eb7p2"]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_7l6h7"]
+light_mode = 1
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_f4t8t"]
+light_mode = 1
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_xarmh"]
+radius = 13.0384
+
+[node name="Area2D" type="Area2D"]
+material = SubResource("CanvasItemMaterial_7l6h7")
+script = ExtResource("1_vtmnb")
+
+[node name="Sprite2D2" type="Sprite2D" parent="."]
+material = SubResource("CanvasItemMaterial_f4t8t")
+texture = ExtResource("2_eb7p2")
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="."]
+top_level = true
+position = Vector2(-0.5, 1)
+shape = SubResource("CircleShape2D_xarmh")
+
+[connection signal="coin_collected" from="." to="." method="_on_coin_collected"]

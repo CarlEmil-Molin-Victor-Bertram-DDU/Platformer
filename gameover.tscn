@@ -1,0 +1,66 @@
+[gd_scene load_steps=3 format=3 uid="uid://b7l6x5032cs02"]
+
+[ext_resource type="AudioStream" uid="uid://cvax3lqbwhnuh" path="res://resources/deathscreen.wav" id="1_p1eh1"]
+
+[sub_resource type="GDScript" id="GDScript_icdau"]
+script/source = "extends Control
+
+func _on_retry_pressed():
+	get_tree().paused = false
+	get_tree().change_scene_to_file(\"res://title_screen.tscn\")
+
+func game_over():
+	get_tree().paused = true
+	
+func _on_quit_pressed():
+	get_tree().quit()
+"
+
+[node name="Gameover" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = SubResource("GDScript_icdau")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 0
+offset_left = 271.0
+offset_top = 138.0
+offset_right = 820.0
+offset_bottom = 227.0
+theme_override_colors/font_color = Color(0.866667, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 60
+text = "Game over"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Retry" type="Button" parent="."]
+layout_mode = 0
+offset_left = 310.0
+offset_top = 339.0
+offset_right = 532.0
+offset_bottom = 449.0
+theme_override_font_sizes/font_size = 24
+text = "Retry
+"
+
+[node name="Quit" type="Button" parent="."]
+layout_mode = 0
+offset_left = 599.0
+offset_top = 339.0
+offset_right = 837.0
+offset_bottom = 451.0
+theme_override_font_sizes/font_size = 30
+text = "Quit
+"
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("1_p1eh1")
+autoplay = true
+
+[connection signal="pressed" from="Retry" to="." method="_on_retry_pressed"]
+[connection signal="pressed" from="Quit" to="." method="_on_quit_pressed"]
