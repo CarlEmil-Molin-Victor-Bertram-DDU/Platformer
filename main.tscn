@@ -1,14 +1,10 @@
-<<<<<<< HEAD
-[gd_scene load_steps=71 format=3 uid="uid://ccti537ufbq2j"]
-=======
-[gd_scene load_steps=73 format=3 uid="uid://ccti537ufbq2j"]
->>>>>>> d5845d014bea232d2e7aeb08b407168a91841c90
+[gd_scene load_steps=76 format=3 uid="uid://ccti537ufbq2j"]
 
 [ext_resource type="Script" path="res://main.gd" id="1_4iktv"]
 [ext_resource type="Script" path="res://scripts/CharacterScript.gd" id="1_5gctq"]
 [ext_resource type="Texture2D" uid="uid://c34mr2nl0a6uk" path="res://resources/Tileset.png" id="1_ywi4v"]
 [ext_resource type="Texture2D" uid="uid://ddipyggcb2pkk" path="res://resources/frog.png" id="2_1ni6d"]
-[ext_resource type="Material" uid="uid://c2a7jcxwfjd6x" path="res://resources/shadow.tres" id="2_4iihf"]
+[ext_resource type="Material" path="res://resources/shadow.tres" id="2_4iihf"]
 [ext_resource type="Texture2D" uid="uid://dqh38phid2btg" path="res://resources/frogwalk.png" id="3_1o8ry"]
 [ext_resource type="Texture2D" uid="uid://c6houtjcbuipy" path="res://resources/smoke.png" id="3_rdomt"]
 [ext_resource type="Texture2D" uid="uid://dlt1vdmoi62ly" path="res://resources/smoke2.png" id="4_0erh2"]
@@ -2096,7 +2092,6 @@ stream = ExtResource("20_0xcyp")
 wait_time = 10.0
 one_shot = true
 
-<<<<<<< HEAD
 [node name="Enemy" parent="." instance=ExtResource("25_7fko2")]
 position = Vector2(171, 4)
 
@@ -2105,7 +2100,7 @@ position = Vector2(263, -17)
 
 [node name="enemy 3" parent="." instance=ExtResource("27_jtsls")]
 position = Vector2(375, -56)
-=======
+
 [node name="Node" type="Node" parent="."]
 
 [node name="Area2D" parent="Node" instance=ExtResource("9_ckokx")]
@@ -2128,7 +2123,6 @@ position = Vector2(2916, 77)
 
 [node name="Area2D7" parent="Node" instance=ExtResource("9_ckokx")]
 position = Vector2(1221, -194)
->>>>>>> d5845d014bea232d2e7aeb08b407168a91841c90
 
 [connection signal="finished" from="Player/death" to="Player" method="_on_death_finished"]
 [connection signal="pressed" from="DamageButton" to="Player" method="_on_damage_button_pressed"]
