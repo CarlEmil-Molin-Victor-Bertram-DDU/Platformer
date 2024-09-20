@@ -1927,14 +1927,12 @@ position = Vector2(0, 2)
 shape = SubResource("RectangleShape2D_dqxsy")
 
 [node name="Stick" type="Sprite2D" parent="Player"]
-material = ExtResource("2_4iihf")
 position = Vector2(2, 5)
 rotation = -0.715585
 texture = ExtResource("7_fjcsc")
 offset = Vector2(14, -14)
 
 [node name="WeaponSwingParticles" type="CPUParticles2D" parent="Player/Stick"]
-material = ExtResource("2_4iihf")
 position = Vector2(21.0068, -21.0407)
 rotation = -0.783653
 emitting = false

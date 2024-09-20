@@ -45,3 +45,4 @@ func _process(delta: float):
 	if coin_count==coins_to_win:
 		win=true
 		print("win")
+		get_tree().change_scene_to_file("res://victory_screen.tscn")
