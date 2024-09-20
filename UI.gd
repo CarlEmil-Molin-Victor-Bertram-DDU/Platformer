@@ -3,6 +3,8 @@ extends Control
 @export var camera: Camera2D
 @onready var coin_label: Label = $CoinLabel
 @onready var coin_sound: AudioStreamPlayer = $CoinPickup
+var coins_to_win = 7
+var win=false
 
 var coin_count: int = 0
 @export var ui_smooth_speed: float = 4
@@ -40,3 +42,6 @@ func _process(delta: float):
 	if camera:
 		# Smoothly move the UI element to match the camera's position
 		position = lerp(position, camera.position + offset, ui_smooth_speed * delta)
+	if coin_count==coins_to_win:
+		win=true
+		print("win")
