@@ -42,7 +42,7 @@ func _process(delta: float):
 	if camera:
 		# Smoothly move the UI element to match the camera's position
 		position = lerp(position, camera.position + offset, ui_smooth_speed * delta)
-	if coin_count==coins_to_win:
+	if coin_count>=coins_to_win:
 		win=true
 		print("win")
 		get_tree().change_scene_to_file("res://victory_screen.tscn")
