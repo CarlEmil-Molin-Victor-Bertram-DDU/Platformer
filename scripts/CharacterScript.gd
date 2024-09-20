@@ -17,7 +17,7 @@ extends CharacterBody2D
 @onready var death_sound: AudioStreamPlayer = $death
 @onready var music: AudioStreamPlayer = get_tree().root.get_node("Node2D/AudioStreamPlayer")
 
-
+signal hit
 var speed = base_speed
 var is_sprinting = false
 var was_moving = false
@@ -294,6 +294,7 @@ func _on_death_finished() -> void:
 	get_tree().change_scene_to_file("res://gameover.tscn")
 
 
+
 func _on_damage_button_pressed():
 	Health_damage(20)
 	_set_health(health)
@@ -309,3 +310,5 @@ func on_coin_area_entered(coin: Area2D):
 	# Connect the coin_collected signal to the _on_coin_collected function
 	coin.coin_collected.connect(Callable(self, "_on_coin_collected"))
 	print("Coin signal connected to player.")
+	
+	

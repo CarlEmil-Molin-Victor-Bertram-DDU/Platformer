@@ -1,4 +1,4 @@
-[gd_scene load_steps=68 format=3 uid="uid://ccti537ufbq2j"]
+[gd_scene load_steps=71 format=3 uid="uid://ccti537ufbq2j"]
 
 [ext_resource type="Script" path="res://main.gd" id="1_4iktv"]
 [ext_resource type="Script" path="res://scripts/CharacterScript.gd" id="1_5gctq"]
@@ -24,6 +24,9 @@
 [ext_resource type="AudioStream" uid="uid://ciiiablm4lbpo" path="res://resources/death.wav" id="17_a24ng"]
 [ext_resource type="AudioStream" uid="uid://kqm585nht15p" path="res://resources/frog.wav" id="20_0xcyp"]
 [ext_resource type="Texture2D" uid="uid://bsjuotgytyuof" path="res://resources/background.png" id="20_lyej2"]
+[ext_resource type="PackedScene" uid="uid://do3owqimlrgb5" path="res://enemy.tscn" id="25_7fko2"]
+[ext_resource type="PackedScene" uid="uid://lanxik5khj6m" path="res://enemy_2.tscn" id="26_e1t4b"]
+[ext_resource type="PackedScene" uid="uid://ct8febbr3utfj" path="res://enemy_3.tscn" id="27_jtsls"]
 
 [sub_resource type="Curve" id="Curve_jqpq7"]
 max_value = 2.5
@@ -1985,7 +1988,7 @@ camera = NodePath("../Camera2D")
 offset = Vector2(-163, -94)
 
 [node name="TextureRect2" type="TextureRect" parent="UI"]
-z_index = -2
+z_index = -5
 layout_mode = 0
 offset_left = -19.0
 offset_top = -11.0
@@ -2047,6 +2050,15 @@ stream = ExtResource("20_0xcyp")
 [node name="Timer" type="Timer" parent="."]
 wait_time = 10.0
 one_shot = true
+
+[node name="Enemy" parent="." instance=ExtResource("25_7fko2")]
+position = Vector2(171, 4)
+
+[node name="enemy 2" parent="." instance=ExtResource("26_e1t4b")]
+position = Vector2(263, -17)
+
+[node name="enemy 3" parent="." instance=ExtResource("27_jtsls")]
+position = Vector2(375, -56)
 
 [connection signal="finished" from="Player/death" to="Player" method="_on_death_finished"]
 [connection signal="pressed" from="DamageButton" to="Player" method="_on_damage_button_pressed"]
