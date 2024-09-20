@@ -58,8 +58,6 @@ var swing_state = 0 # 0 = not swinging, 1 = delay before hit, 2 = hitting, 3 = p
 
 
 func _ready():
-	health = 100
-	#on_dead = die
 	healthbar.init_health(health)
 
 func _input(event):
