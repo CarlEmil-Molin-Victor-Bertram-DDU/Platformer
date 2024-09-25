@@ -2097,7 +2097,7 @@ position = Vector2(171, 4)
 position = Vector2(263, -17)
 
 [node name="enemy 3" parent="." instance=ExtResource("27_jtsls")]
-position = Vector2(375, -56)
+position = Vector2(404, -59)
 
 [node name="Node" type="Node" parent="."]
 
