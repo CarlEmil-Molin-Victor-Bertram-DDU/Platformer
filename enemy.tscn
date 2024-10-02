@@ -32,13 +32,13 @@ radius = 217.665
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_yktft"]
 
 [node name="Enemy" type="CharacterBody2D"]
-collision_layer = 2
-collision_mask = 3
+collision_layer = 4
+collision_mask = 2
 floor_stop_on_slope = false
-floor_constant_speed = true
 script = ExtResource("1_unjef")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(2, -1)
 sprite_frames = SubResource("SpriteFrames_cilxu")
 autoplay = "default"
 
@@ -57,7 +57,6 @@ collision_layer = 2
 collision_mask = 3
 
 [node name="CollisionShape2D2" type="CollisionShape2D" parent="hit"]
-position = Vector2(-2, 6)
 shape = SubResource("RectangleShape2D_yktft")
 
 [node name="Healthbar" parent="." instance=ExtResource("3_y7a55")]

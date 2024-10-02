@@ -25,28 +25,27 @@ func Health_damage(damage):
 	if health <= 0:
 		queue_free()
 
-func _physics_process(delta):
+func _physics_process(delta: float) -> void:
 	if player_chase and player:
-		var distance_to_player = position.distance_to(player.position)
-		
-		if distance_to_player > 1:  
-			position = position.move_toward(player.position, speed * delta)  # Corrected movement logic.
-		else:
-			player_chase = false
+		var direction = (player.position - position).normalized()
+		velocity.x = direction.x * speed
+		velocity.y = direction.y * speed
+		animated_sprite.flip_h = direction.x < 0
+	else:
+		velocity.x = move_toward(velocity.x, 0, speed * delta)
+		velocity.y = move_toward(velocity.y, 0, speed * delta)
+	move_and_slide()
 
-		animated_sprite.flip_h = player.position.x < position.x
-
-func _on_detection_body_entered(body):
+func _on_detection_body_entered(body: Node) -> void:
 	if body.name == "Player":  
 		player = body
 		player_chase = true
-		print("detected body")
 
-func _on_detection_body_exited(body):
+func _on_detection_body_exited(body: Node) -> void:
 	if body == player:
 		player = null
 		player_chase = false
-
+		
 func _on_hit_body_entered(body):
 	if body.name == "Player":
 		print("hit")
