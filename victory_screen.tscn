@@ -1,0 +1,42 @@
+[gd_scene load_steps=3 format=3 uid="uid://c08kdoiwbymh7"]
+
+[ext_resource type="Script" path="res://victory_screen.gd" id="1_8g4h3"]
+[ext_resource type="AudioStream" uid="uid://u3jegrtwd7sc" path="res://resources/victory.mp3" id="2_msu0j"]
+
+[node name="victory_screen" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_8g4h3")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 0
+offset_left = 297.0
+offset_top = 192.0
+offset_right = 866.0
+offset_bottom = 313.0
+theme_override_colors/font_color = Color(0.636709, 0.515193, 0.250524, 1)
+theme_override_font_sizes/font_size = 60
+text = "Victory
+"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Quit" type="Button" parent="."]
+layout_mode = 0
+offset_left = 450.0
+offset_top = 361.0
+offset_right = 718.0
+offset_bottom = 485.0
+theme_override_font_sizes/font_size = 30
+text = "Quit"
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("2_msu0j")
+volume_db = -10.0
+autoplay = true
+
+[connection signal="pressed" from="Quit" to="." method="_on_quit_pressed"]

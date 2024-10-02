@@ -16,6 +16,7 @@ extends CharacterBody2D
 @onready var damage_sound: AudioStreamPlayer = $damage
 @onready var death_sound: AudioStreamPlayer = $death
 @onready var music: AudioStreamPlayer = get_tree().root.get_node("Node2D/AudioStreamPlayer")
+@onready var coin_scene: PackedScene = preload("res://coin.tscn")
 
 signal hit
 var speed = base_speed
@@ -58,9 +59,9 @@ var swing_state = 0 # 0 = not swinging, 1 = delay before hit, 2 = hitting, 3 = p
 
 
 func _ready():
-	health = 100
-	#on_dead = die
 	healthbar.init_health(health)
+	if coin_scene == null:
+		print("Error: coin_scene not loaded correctly")
 
 func _input(event):
 	if event is InputEventKey and event.keycode == KEY_SHIFT:
@@ -72,6 +73,12 @@ func _input(event):
 	# Check for weapon swing (e.g., pressing spacebar)
 	if event.is_action_pressed("ui_attack"):
 		swing_weapon()
+	
+	if event.is_action_pressed("ui_accept"):
+		for i in range(7):  # Loop to create 7 instances
+			var coin_instance = coin_scene.instantiate()  # Create an instance of coin.tscn (use instantiate() in Godot 4.x)
+			add_child(coin_instance)  # Add the instance to the player (self)
+			# Optionally, set the position or properties relative to the player
 
 func start_sprinting():
 	if not is_sprinting:

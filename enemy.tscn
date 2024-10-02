@@ -32,18 +32,19 @@ radius = 217.665
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_yktft"]
 
 [node name="Enemy" type="CharacterBody2D"]
-collision_layer = 2
-collision_mask = 3
-floor_constant_speed = true
+collision_layer = 4
+collision_mask = 2
+floor_stop_on_slope = false
 script = ExtResource("1_unjef")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(2, -1)
 sprite_frames = SubResource("SpriteFrames_cilxu")
 autoplay = "default"
 
 [node name="Detection" type="Area2D" parent="."]
 collision_layer = 2
-collision_mask = 2
+collision_mask = 3
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Detection"]
 shape = SubResource("CircleShape2D_m4osu")
@@ -53,10 +54,9 @@ shape = SubResource("RectangleShape2D_yktft")
 
 [node name="hit" type="Area2D" parent="."]
 collision_layer = 2
-collision_mask = 2
+collision_mask = 3
 
 [node name="CollisionShape2D2" type="CollisionShape2D" parent="hit"]
-position = Vector2(-2, 6)
 shape = SubResource("RectangleShape2D_yktft")
 
 [node name="Healthbar" parent="." instance=ExtResource("3_y7a55")]
@@ -64,12 +64,14 @@ offset_left = -20.0
 offset_top = -14.0
 offset_right = 20.0
 offset_bottom = -10.0
+metadata/_edit_use_anchors_ = true
 
 [node name="DamageNumbers" type="Node2D" parent="."]
 
 [node name="DamageButton" type="Button" parent="."]
 offset_right = 8.0
 offset_bottom = 8.0
+metadata/_edit_use_anchors_ = true
 
 [connection signal="body_entered" from="Detection" to="." method="_on_detection_body_entered"]
 [connection signal="body_exited" from="Detection" to="." method="_on_detection_body_exited"]
