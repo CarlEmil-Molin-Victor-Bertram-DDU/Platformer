@@ -1928,6 +1928,10 @@ frame_progress = 0.888209
 position = Vector2(0, 2)
 shape = SubResource("RectangleShape2D_dqxsy")
 
+[node name="Bow" type="Sprite2D" parent="Player"]
+position = Vector2(2, 5)
+rotation = -0.715585
+
 [node name="Stick" type="Sprite2D" parent="Player"]
 position = Vector2(2, 5)
 rotation = -0.715585
@@ -2030,12 +2034,17 @@ offset = Vector2(-163, -94)
 
 [node name="TextureRect2" type="TextureRect" parent="UI"]
 z_index = -5
-layout_mode = 0
+layout_mode = 1
+anchors_preset = -1
+anchor_left = -1.3
+anchor_top = -0.625
+anchor_right = -1.3
+anchor_bottom = -0.625
 offset_left = -19.0
 offset_top = -11.0
 offset_right = 1901.0
 offset_bottom = 1069.0
-scale = Vector2(0.25, 0.25)
+scale = Vector2(0.3, 0.3)
 pivot_offset = Vector2(-50, -70)
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -2092,10 +2101,6 @@ shadow_item_cull_mask = 7
 height = 1.0
 max_distance = 1e+06
 
-[node name="DamageButton" type="Button" parent="."]
-offset_right = 8.0
-offset_bottom = 8.0
-
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("20_0xcyp")
 
@@ -2139,7 +2144,6 @@ position = Vector2(1221, -194)
 [connection signal="hit" from="Player" to="enemy 2" method="_on_player_hit"]
 [connection signal="hit" from="Player" to="enemy 3" method="_on_player_hit"]
 [connection signal="finished" from="Player/death" to="Player" method="_on_death_finished"]
-[connection signal="pressed" from="DamageButton" to="Player" method="_on_damage_button_pressed"]
 [connection signal="finished" from="AudioStreamPlayer" to="." method="_on_audio_stream_player_finished"]
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
 [connection signal="hurt" from="Enemy" to="Player" method="_on_enemy_hurt"]

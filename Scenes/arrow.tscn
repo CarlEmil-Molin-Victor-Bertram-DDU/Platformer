@@ -1,0 +1,42 @@
+[gd_scene load_steps=5 format=3 uid="uid://i82l28dikcht"]
+
+[ext_resource type="Texture2D" uid="uid://c2y2cspj1pby" path="res://Arrow.png" id="1_4k7px"]
+[ext_resource type="Script" path="res://arrow.gd" id="2_3n2qy"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_18wit"]
+size = Vector2(32, 4)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ip65x"]
+size = Vector2(34, 6)
+
+[node name="arrow" type="CharacterBody2D"]
+collision_layer = 4
+collision_mask = 12
+script = ExtResource("2_3n2qy")
+speed = 800
+
+[node name="CPUParticles2D" type="CPUParticles2D" parent="."]
+position = Vector2(-15, 0)
+gravity = Vector2(0, 0)
+angle_min = 45.0
+angle_max = 45.0
+scale_amount_min = 3.0
+scale_amount_max = 3.0
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+rotation = 0.785398
+texture = ExtResource("1_4k7px")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(1, 0)
+shape = SubResource("RectangleShape2D_18wit")
+
+[node name="hit" type="Area2D" parent="."]
+collision_layer = 15
+collision_mask = 15
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="hit"]
+position = Vector2(1, 0)
+shape = SubResource("RectangleShape2D_ip65x")
+
+[connection signal="body_entered" from="hit" to="." method="_on_hit_body_entered"]
