@@ -1,6 +1,6 @@
 [gd_scene load_steps=9 format=3 uid="uid://do3owqimlrgb5"]
 
-[ext_resource type="Script" path="res://Enemy.gd" id="1_unjef"]
+[ext_resource type="Script" path="res://scripts/Enemy.gd" id="1_unjef"]
 [ext_resource type="Texture2D" uid="uid://dmem053t218to" path="res://resources/ghost.png" id="2_68bar"]
 [ext_resource type="PackedScene" uid="uid://codjmc6lnljyv" path="res://Healthbar/Healthbar.tscn" id="3_y7a55"]
 
@@ -32,13 +32,14 @@ radius = 217.665
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_yktft"]
 
 [node name="Enemy" type="CharacterBody2D"]
-collision_layer = 2
-collision_mask = 3
+collision_layer = 8
+collision_mask = 0
 floor_stop_on_slope = false
-floor_constant_speed = true
 script = ExtResource("1_unjef")
+metadata/enemy = true
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(2, -1)
 sprite_frames = SubResource("SpriteFrames_cilxu")
 autoplay = "default"
 
@@ -57,24 +58,17 @@ collision_layer = 2
 collision_mask = 3
 
 [node name="CollisionShape2D2" type="CollisionShape2D" parent="hit"]
-position = Vector2(-2, 6)
 shape = SubResource("RectangleShape2D_yktft")
 
 [node name="Healthbar" parent="." instance=ExtResource("3_y7a55")]
 offset_left = -20.0
-offset_top = -14.0
+offset_top = -24.0
 offset_right = 20.0
-offset_bottom = -10.0
+offset_bottom = -20.0
 metadata/_edit_use_anchors_ = true
 
 [node name="DamageNumbers" type="Node2D" parent="."]
 
-[node name="DamageButton" type="Button" parent="."]
-offset_right = 8.0
-offset_bottom = 8.0
-metadata/_edit_use_anchors_ = true
-
 [connection signal="body_entered" from="Detection" to="." method="_on_detection_body_entered"]
 [connection signal="body_exited" from="Detection" to="." method="_on_detection_body_exited"]
 [connection signal="body_entered" from="hit" to="." method="_on_hit_body_entered"]
-[connection signal="pressed" from="DamageButton" to="." method="_on_damage_button_pressed"]

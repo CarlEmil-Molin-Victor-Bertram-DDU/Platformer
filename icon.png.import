@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cb3w8u4am2fci"
-path="res://.godot/imported/King crown.png-297f827a14e21dc26bad719b55d0ea9b.ctex"
+uid="uid://fjath3ifx0ae"
+path="res://.godot/imported/icon.png-487276ed1e3a0c39cad0279d744ee560.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://King crown.png"
-dest_files=["res://.godot/imported/King crown.png-297f827a14e21dc26bad719b55d0ea9b.ctex"]
+source_file="res://icon.png"
+dest_files=["res://.godot/imported/icon.png-487276ed1e3a0c39cad0279d744ee560.ctex"]
 
 [params]
 

@@ -11,18 +11,13 @@ config_version=5
 [application]
 
 config/name="Dungeon Crawler"
-run/main_scene="res://title_screen.tscn"
+run/main_scene="res://Scenes/title_screen.tscn"
 config/features=PackedStringArray("4.2", "Forward Plus")
 boot_splash/show_image=false
 
 [autoload]
 
-DamageNumbers="*res://DamageNumbers.gd"
-
-[display]
-
-window/size/resizable=false
-window/size/borderless=true
+DamageNumbers="*res://scripts/DamageNumbers.gd"
 
 [dotnet]
 

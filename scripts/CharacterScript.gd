@@ -7,6 +7,7 @@ extends CharacterBody2D
 @export var acceleration = 50.0
 @export var weapon = "stick"
 @export var arrows = 1
+
 @onready var attack_sound: AudioStreamPlayer = $AttackSound
 @onready var jump_sound: AudioStreamPlayer = $jump
 @onready var landing_sound: AudioStreamPlayer = $LandingSound
@@ -16,9 +17,10 @@ extends CharacterBody2D
 @onready var damage_sound: AudioStreamPlayer = $damage
 @onready var death_sound: AudioStreamPlayer = $death
 @onready var music: AudioStreamPlayer = get_tree().root.get_node("Node2D/AudioStreamPlayer")
-@onready var coin_scene: PackedScene = preload("res://coin.tscn")
+@onready var coin_scene: PackedScene = preload("res://Scenes/coin.tscn")
 
 signal hit
+
 var speed = base_speed
 var is_sprinting = false
 var was_moving = false
@@ -26,8 +28,17 @@ var was_on_floor = false
 var has_jumped = false
 var is_jumping = false
 var has_played = false
+var damage
 var gravity: float = ProjectSettings.get_setting("physics/2d/default_gravity")
 var last_direction = 1  # 1 for right, -1 for left (default to right)
+var knockback_dir = Vector2()
+var knocked_back = false
+
+var immunity_duration = 2  # Immunity duration in seconds
+var immunity_timer = 0.0  # Timer to track immunity state
+var is_flashing = false  # Track if the player is currently flashing
+var flash_timer = 0.0  # Timer for controlling the flash interval
+var flash_interval = 0.1  # Time between flashes
 
 # Variables for weapon swing
 var is_swinging = false
@@ -39,21 +50,15 @@ var cooldown_timer = 0.0  # Weapon cooldown timer
 
 var swing_state = 0 # 0 = not swinging, 1 = delay before hit, 2 = hitting, 3 = post-hit delay
 
-# Variables for shooting bow
-var is_shooting = false
-var shooting_timer = 0.0
-var shoot_duration = 0.2
-var cooldown_btimer = 0.0
-
-var shoot_state = 0 # 0 = not shooting, 1 = processing shot, 2 = shooting, 3 = reloading
 @export var weapon_stats = {
-	"stick": {"damage": 5, "range": 30, "attack_speed": 0.8},
-	"sword": {"damage": 10, "range": 50, "attack_speed": 1.0},
-	"bow": {"damage": 8, "attack_speed": 0.8},
-	"axe": {"damage": 15, "range": 40, "attack_speed": 1.2},
-	"fish": {"damage": 100, "range": 50, "attack_speed": 1.4},
-	"banana": {"damage": 100, "attack_speed": 1.0},
+	"stick": {"damage": 5, "range": 30, "attack_speed": 0.8, "type": "melee"},
+	"sword": {"damage": 10, "range": 50, "attack_speed": 1.0, "type": "melee"},
+	"bow": {"damage": 8, "range": 200, "attack_speed": 0.8, "type": "ranged"},
+	"axe": {"damage": 15, "range": 40, "attack_speed": 1.2, "type": "melee"},
+	"fish": {"damage": 100, "range": 50, "attack_speed": 1.4, "type": "melee"},
+	"banana": {"damage": 100, "range": 50, "attack_speed": 1.0, "type": "melee"},
 }
+
 
 @onready var sprint_explosion_particles = $SprintExplosionParticles
 @onready var land_particles = $landparticles
@@ -61,7 +66,6 @@ var shoot_state = 0 # 0 = not shooting, 1 = processing shot, 2 = shooting, 3 = r
 @onready var weapon_swing_particles = $Stick/WeaponSwingParticles
 @onready var animated_sprite = $AnimatedSprite2D
 @onready var stick = $Stick # Reference to the stick sprite node
-@onready var bow = $Bow # Reference to the bow sprite node
 @onready var healthbar = $Healthbar
 @onready var damage_numbers_origin = $DamageNumbers
 
@@ -81,9 +85,6 @@ func _input(event):
 	# Check for weapon swing (e.g., pressing spacebar)
 	if event.is_action_pressed("ui_attack"):
 		swing_weapon()
-	
-	if event.is_action_pressed("ui_shoot"):
-		shoot_bow()
 	
 	if event.is_action_pressed("ui_accept"):
 		for i in range(7):  # Loop to create 7 instances
@@ -109,46 +110,15 @@ func trigger_sprint_explosion():
 	sprint_explosion_particles.restart()
 
 func swing_weapon():
-	# Check if weapon is not already swinging and cooldown is over
 	if not is_swinging and cooldown_timer <= 0:
 		is_swinging = true
-		swing_state = 1 # Start with delay before hitting
+		swing_state = 1  # Start with delay before hitting
 		swing_timer = hit_delay  # Set the initial delay before the hit
-		stick.visible = true # Show the weapon before the hit
+		stick.visible = true  # Show the weapon before the hit
 		stick.rotation_degrees = -41  # Start rotation
 
 		# Set the cooldown timer based on the weapon's attack speed
 		cooldown_timer = weapon_stats[weapon].attack_speed
-func shoot_bow():
-	# Check if shooting
-	print("shooting bow")
-	if not is_shooting and cooldown_btimer <= 0:
-		is_shooting = true
-		shoot_state = 1
-
-		# Ensure the bow reference is not null before setting visibility
-		if bow:
-			bow.visible = true
-
-
-func apply_damage():
-	# Placeholder logic to apply damage to enemies within range
-	var damage = weapon_stats[weapon].damage
-	var reach = weapon_stats[weapon].range
-	attack_sound.play()
-
-	# Determine attack range based on the last movement direction
-	# If last_direction is 1, the attack is to the right; if -1, to the left
-	var attack_position = global_position + Vector2(last_direction * reach, 0)
-
-	# Use collision or area detection to find enemies within the weapon's range in the direction of last movement
-	# Here, you would need to detect and apply damage to enemies
-	# Example:
-	# var enemies_in_range = get_overlapping_enemies_in_direction(attack_position)
-	# for enemy in enemies_in_range:
-	#     enemy.take_damage(damage)
-
-	print("Swinging weapon: " + weapon + ", Damage: " + str(damage) + ", Range: " + str(reach) + ", Direction: " + str(last_direction))
 
 func get_input():
 	var input_direction = Input.get_axis("ui_left", "ui_right")
@@ -209,43 +179,62 @@ func get_input():
 	was_moving = is_moving
 
 func _physics_process(delta: float) -> void:
+	damage=weapon_stats[weapon].damage
 	get_input()
+	
+		# Process damage immunity timer
+	if immunity_timer > 0:
+		immunity_timer -= delta
+	
+		# Handle flashing effect if player is hurt and in the immunity phase
+		if is_flashing:
+			flash_timer += delta
+			if flash_timer >= flash_interval:
+				flash_timer = 0.0
+				
+				# Toggle between red and normal color
+				if animated_sprite.modulate == Color(1, 0.2, 0.2, 0.7):
+					animated_sprite.modulate = Color(1, 1, 1, 1)  # Reset to normal color
+				else:
+					animated_sprite.modulate = Color(1, 0.2, 0.2, 0.7)  # Flash red and semi-transparent
+		
+		# Stop flashing after immunity ends
+		if immunity_timer <= 0:
+			stop_flashing()
 	
 	if not is_swinging:
 		stick.visible = false
 	
-	# Handle weapon swinging states
 	if is_swinging:
 		swing_timer -= delta
-		if swing_state == 1: # Delay before hit
+		if swing_state == 1:
 			if swing_timer <= 0:
-				# Move to the hitting state
 				swing_state = 2
 				swing_timer = swing_duration
-				# Apply the damage now
-				apply_damage()
-				# Trigger the weapon swing particle effect
 				weapon_swing_particles.emitting = true
 		
-		elif swing_state == 2: # Hitting
-			# Calculate the rotation based on how much time is left
+		elif swing_state == 2:
+			for body in $Stick/hit.get_overlapping_bodies():
+				if swing_state == 2 and body.is_in_group("enemies"):
+					print("knockback")
+					knocked_back = true
+					print("Enemy hit:", body.name)
+					emit_signal("hit", body)  # Emit the hit signal
+
 			if last_direction == 1:
-				# Swing to the right
 				stick.rotation_degrees = lerp(-41, 180, (swing_duration - swing_timer) / swing_duration)
 			else:
-				# Swing to the left (mirror the swing)
 				stick.rotation_degrees = lerp(-41, -270, (swing_duration - swing_timer) / swing_duration)
 			
 			if swing_timer <= 0:
-				# Move to post-hit delay
 				swing_state = 3
 				swing_timer = post_hit_delay
-				# Maintain the weapon's final position
 				if last_direction == 1:
 					stick.rotation_degrees = 180
 				else:
 					stick.rotation_degrees = -270
-				weapon_swing_particles.emitting = false  # Stop particle effect
+				weapon_swing_particles.emitting = false
+				knocked_back=false
 		
 		elif swing_state == 3: # Post-hit delay
 			# Weapon stays in the final position during this phase
@@ -294,22 +283,11 @@ func _physics_process(delta: float) -> void:
 		was_on_floor = false
 		has_jumped = false
 
-
 	# Move the character
 	move_and_slide()
 
 func _set_health(_value):
-	#super._set_health(value)
-	#if health <= 0 && is_alive:
-		#_die()
-	healthbar.health = health
-
-func Health_damage(damage):
-	damage_sound.play()
-	health -= damage
-	DamageNumbers.display_number(damage, damage_numbers_origin.global_position)
-
-	if health >= 0:
+	if health <= 0:
 		attack_sound.stop()
 		blink.stop()
 		jump_sound.stop()
@@ -318,16 +296,17 @@ func Health_damage(damage):
 		landing_sound.stop()
 		music.stop()
 		death_sound.play()
+		
+	healthbar.health = health
+
+func Health_damage(damage):
+	damage_sound.play()
+	health -= damage
+	DamageNumbers.display_number(damage, damage_numbers_origin.global_position)
 
 func _on_death_finished() -> void:
 	self.queue_free()
-	get_tree().change_scene_to_file("res://gameover.tscn")
-
-
-
-func _on_damage_button_pressed():
-	Health_damage(20)
-	_set_health(health)
+	get_tree().change_scene_to_file("res://Scenes/gameover.tscn")
 
 var coin_count: int = 0
 
@@ -340,5 +319,37 @@ func on_coin_area_entered(coin: Area2D):
 	# Connect the coin_collected signal to the _on_coin_collected function
 	coin.coin_collected.connect(Callable(self, "_on_coin_collected"))
 	print("Coin signal connected to player.")
-	
-	
+
+func _on_enemy_hurt() -> void:
+	if immunity_timer <= 0:
+		Health_damage(5)
+		_set_health(health)
+		
+		immunity_timer = immunity_duration
+		start_flashing()
+
+func _on_enemy_2_hurt() -> void:
+	if immunity_timer <= 0:
+		Health_damage(5)
+		_set_health(health)
+		
+		immunity_timer = immunity_duration
+		start_flashing()
+
+func _on_enemy_3_hurt() -> void:
+	if immunity_timer <= 0:
+		Health_damage(5)
+		_set_health(health)
+		
+		immunity_timer = immunity_duration
+		start_flashing()
+
+# Start the flashing effect
+func start_flashing():
+	is_flashing = true
+	flash_timer = 0.0  # Reset the flash timer
+
+# Function to stop flashing after immunity ends
+func stop_flashing():
+	is_flashing = false
+	animated_sprite.modulate = Color(1, 1, 1, 1)  # Reset to normal color

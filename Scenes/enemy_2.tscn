@@ -1,6 +1,6 @@
 [gd_scene load_steps=8 format=3 uid="uid://lanxik5khj6m"]
 
-[ext_resource type="Script" path="res://enemy_2.gd" id="1_v4ja8"]
+[ext_resource type="Script" path="res://scripts/enemy_2.gd" id="1_v4ja8"]
 [ext_resource type="Texture2D" uid="uid://bbfkw5ng13ulx" path="res://resources/Slime still png.png" id="2_yo1lo"]
 [ext_resource type="PackedScene" uid="uid://codjmc6lnljyv" path="res://Healthbar/Healthbar.tscn" id="3_xu57d"]
 
@@ -25,11 +25,12 @@ radius = 217.665
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_6ba6g"]
 
 [node name="enemy 2" type="CharacterBody2D"]
-collision_layer = 2
-collision_mask = 3
+collision_layer = 4
+collision_mask = 2
 floor_stop_on_slope = false
 script = ExtResource("1_v4ja8")
 health = 50
+metadata/enemy = true
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_bkha7")
@@ -54,19 +55,13 @@ shape = SubResource("RectangleShape2D_6ba6g")
 
 [node name="Healthbar" parent="." instance=ExtResource("3_xu57d")]
 offset_left = -20.0
-offset_top = -14.0
+offset_top = -24.0
 offset_right = 20.0
-offset_bottom = -10.0
+offset_bottom = -20.0
 metadata/_edit_use_anchors_ = true
 
 [node name="DamageNumbers" type="Node2D" parent="."]
 
-[node name="DamageButton" type="Button" parent="."]
-offset_right = 8.0
-offset_bottom = 8.0
-metadata/_edit_use_anchors_ = true
-
 [connection signal="body_entered" from="detect" to="." method="_on_detect_body_entered"]
 [connection signal="body_exited" from="detect" to="." method="_on_detect_body_exited"]
 [connection signal="body_entered" from="hit" to="." method="_on_hit_body_entered"]
-[connection signal="pressed" from="DamageButton" to="." method="_on_damage_button_pressed"]

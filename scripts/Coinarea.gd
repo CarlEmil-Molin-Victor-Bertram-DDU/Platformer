@@ -19,8 +19,7 @@ func _ready():
 
 func _on_body_entered(body):
 	print("Collision detected with:", body.name)
-	# Using the correct syntax for checking name or group
-	if body.name == "Player":  # OR if body.is_in_group("player"):
+	if body.name == "Player":
 		print("Player entered. Emitting coin_collected signal with value:", value)
 		coin_collected.emit(value)
 		queue_free()

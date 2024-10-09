@@ -1,6 +1,6 @@
-[gd_scene load_steps=76 format=3 uid="uid://ccti537ufbq2j"]
+[gd_scene load_steps=77 format=3 uid="uid://ccti537ufbq2j"]
 
-[ext_resource type="Script" path="res://main.gd" id="1_4iktv"]
+[ext_resource type="Script" path="res://scripts/main.gd" id="1_4iktv"]
 [ext_resource type="Script" path="res://scripts/CharacterScript.gd" id="1_5gctq"]
 [ext_resource type="Texture2D" uid="uid://c34mr2nl0a6uk" path="res://resources/Tileset.png" id="1_ywi4v"]
 [ext_resource type="Texture2D" uid="uid://ddipyggcb2pkk" path="res://resources/frog.png" id="2_1ni6d"]
@@ -11,11 +11,11 @@
 [ext_resource type="Texture2D" uid="uid://c5vd0mrv3acm1" path="res://resources/Stick.png" id="7_fjcsc"]
 [ext_resource type="PackedScene" uid="uid://codjmc6lnljyv" path="res://Healthbar/Healthbar.tscn" id="7_is4sp"]
 [ext_resource type="Texture2D" uid="uid://el0hjjy2ipyv" path="res://resources/Coin.png" id="8_kggf3"]
-[ext_resource type="PackedScene" uid="uid://jfw3c5yhtcju" path="res://coin.tscn" id="9_ckokx"]
+[ext_resource type="PackedScene" uid="uid://jfw3c5yhtcju" path="res://Scenes/coin.tscn" id="9_ckokx"]
 [ext_resource type="AudioStream" uid="uid://bkndths843km1" path="res://resources/whoosh.mp3" id="9_f4jn8"]
 [ext_resource type="AudioStream" uid="uid://dwaeh0hjm71d2" path="res://resources/item equip.mp3" id="9_v7304"]
-[ext_resource type="Script" path="res://UI.gd" id="10_s7vxq"]
-[ext_resource type="Script" path="res://camera.gd" id="10_tg8ut"]
+[ext_resource type="Script" path="res://scripts/UI.gd" id="10_s7vxq"]
+[ext_resource type="Script" path="res://scripts/camera.gd" id="10_tg8ut"]
 [ext_resource type="AudioStream" uid="uid://c3xjwguo2w8g1" path="res://resources/jump.wav" id="11_25wph"]
 [ext_resource type="AudioStream" uid="uid://chl00grxmqo5g" path="res://resources/land.wav" id="12_3tnji"]
 [ext_resource type="AudioStream" uid="uid://buaqywtt10vxt" path="res://resources/walk.wav" id="13_w25lb"]
@@ -25,9 +25,9 @@
 [ext_resource type="AudioStream" uid="uid://ciiiablm4lbpo" path="res://resources/death.wav" id="17_a24ng"]
 [ext_resource type="AudioStream" uid="uid://kqm585nht15p" path="res://resources/frog.wav" id="20_0xcyp"]
 [ext_resource type="Texture2D" uid="uid://bsjuotgytyuof" path="res://resources/background.png" id="20_lyej2"]
-[ext_resource type="PackedScene" uid="uid://do3owqimlrgb5" path="res://enemy.tscn" id="25_7fko2"]
-[ext_resource type="PackedScene" uid="uid://lanxik5khj6m" path="res://enemy_2.tscn" id="26_e1t4b"]
-[ext_resource type="PackedScene" uid="uid://ct8febbr3utfj" path="res://enemy_3.tscn" id="27_jtsls"]
+[ext_resource type="PackedScene" uid="uid://do3owqimlrgb5" path="res://Scenes/enemy.tscn" id="25_7fko2"]
+[ext_resource type="PackedScene" uid="uid://lanxik5khj6m" path="res://Scenes/enemy_2.tscn" id="26_e1t4b"]
+[ext_resource type="PackedScene" uid="uid://ct8febbr3utfj" path="res://Scenes/enemy_3.tscn" id="27_jtsls"]
 
 [sub_resource type="Curve" id="Curve_jqpq7"]
 max_value = 2.5
@@ -140,6 +140,8 @@ size = Vector2(28, 20)
 max_value = 3.0
 _data = [Vector2(0, 3), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
 point_count = 2
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_s1qoi"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_ciuvy"]
 
@@ -1820,8 +1822,8 @@ texture = ExtResource("1_ywi4v")
 
 [sub_resource type="TileSet" id="TileSet_0nsn6"]
 occlusion_layer_0/light_mask = 1023
-physics_layer_0/collision_layer = 1
-physics_layer_0/collision_mask = 2
+physics_layer_0/collision_layer = 7
+physics_layer_0/collision_mask = 7
 physics_layer_0/physics_material = SubResource("PhysicsMaterial_ciuvy")
 terrain_set_0/mode = 0
 terrain_set_0/terrain_0/name = "Terrain"
@@ -1930,7 +1932,7 @@ shape = SubResource("RectangleShape2D_dqxsy")
 position = Vector2(2, 5)
 rotation = -0.715585
 texture = ExtResource("7_fjcsc")
-offset = Vector2(14, -14)
+offset = Vector2(15, -14)
 
 [node name="WeaponSwingParticles" type="CPUParticles2D" parent="Player/Stick"]
 position = Vector2(21.0068, -21.0407)
@@ -1942,6 +1944,16 @@ emission_shape = 3
 emission_rect_extents = Vector2(10, 1)
 gravity = Vector2(0, 0)
 scale_amount_curve = SubResource("Curve_x1us7")
+
+[node name="hit" type="Area2D" parent="Player/Stick"]
+collision_layer = 14
+collision_mask = 14
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player/Stick/hit"]
+position = Vector2(15.2867, -14.5368)
+rotation = -0.794125
+scale = Vector2(2.03, 0.13)
+shape = SubResource("RectangleShape2D_s1qoi")
 
 [node name="Healthbar" parent="Player" instance=ExtResource("7_is4sp")]
 offset_left = -20.0
@@ -2123,7 +2135,13 @@ position = Vector2(2916, 77)
 [node name="Area2D7" parent="Node" instance=ExtResource("9_ckokx")]
 position = Vector2(1221, -194)
 
+[connection signal="hit" from="Player" to="Enemy" method="_on_player_hit"]
+[connection signal="hit" from="Player" to="enemy 2" method="_on_player_hit"]
+[connection signal="hit" from="Player" to="enemy 3" method="_on_player_hit"]
 [connection signal="finished" from="Player/death" to="Player" method="_on_death_finished"]
 [connection signal="pressed" from="DamageButton" to="Player" method="_on_damage_button_pressed"]
 [connection signal="finished" from="AudioStreamPlayer" to="." method="_on_audio_stream_player_finished"]
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
+[connection signal="hurt" from="Enemy" to="Player" method="_on_enemy_hurt"]
+[connection signal="hurt" from="enemy 2" to="Player" method="_on_enemy_2_hurt"]
+[connection signal="hurt" from="enemy 3" to="Player" method="_on_enemy_3_hurt"]

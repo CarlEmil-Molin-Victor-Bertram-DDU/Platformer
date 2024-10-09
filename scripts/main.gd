@@ -15,7 +15,6 @@ func play_audio():
 	audio_player.play()
 
 func _on_timer_timeout():
-	# When the timer times out, play the audio again
 	play_audio()
 
 
