@@ -1,0 +1,78 @@
+[gd_scene load_steps=8 format=3 uid="uid://c31c7ghvfje1b"]
+
+[ext_resource type="Texture2D" uid="uid://dmem053t218to" path="res://resources/ghost.png" id="2_68bar"]
+[ext_resource type="PackedScene" uid="uid://codjmc6lnljyv" path="res://Healthbar/Healthbar.tscn" id="3_y7a55"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_y0oda"]
+atlas = ExtResource("2_68bar")
+region = Rect2(0, 0, 27, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0ge8l"]
+atlas = ExtResource("2_68bar")
+region = Rect2(27, 0, 27, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_cilxu"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_y0oda")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0ge8l")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_m4osu"]
+radius = 217.665
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_yktft"]
+
+[node name="Enemy" type="CharacterBody2D"]
+collision_layer = 2
+collision_mask = 3
+floor_stop_on_slope = false
+floor_constant_speed = true
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_cilxu")
+autoplay = "default"
+
+[node name="Detection" type="Area2D" parent="."]
+collision_layer = 2
+collision_mask = 3
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Detection"]
+shape = SubResource("CircleShape2D_m4osu")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_yktft")
+
+[node name="hit" type="Area2D" parent="."]
+collision_layer = 2
+collision_mask = 3
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="hit"]
+position = Vector2(-2, 6)
+shape = SubResource("RectangleShape2D_yktft")
+
+[node name="Healthbar" parent="." instance=ExtResource("3_y7a55")]
+offset_left = -20.0
+offset_top = -14.0
+offset_right = 20.0
+offset_bottom = -10.0
+metadata/_edit_use_anchors_ = true
+
+[node name="DamageNumbers" type="Node2D" parent="."]
+
+[node name="DamageButton" type="Button" parent="."]
+offset_right = 8.0
+offset_bottom = 8.0
+metadata/_edit_use_anchors_ = true
+
+[connection signal="body_entered" from="Detection" to="." method="_on_detection_body_entered"]
+[connection signal="body_exited" from="Detection" to="." method="_on_detection_body_exited"]
+[connection signal="body_entered" from="hit" to="." method="_on_hit_body_entered"]
+[connection signal="pressed" from="DamageButton" to="." method="_on_damage_button_pressed"]

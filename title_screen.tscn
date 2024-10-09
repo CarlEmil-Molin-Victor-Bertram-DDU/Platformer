@@ -1,7 +1,7 @@
-[gd_scene load_steps=3 format=3 uid="uid://y3hcexypx45q"]
+[gd_scene load_steps=3 format=3 uid="uid://cm81ds6mvqk12"]
 
-[ext_resource type="Script" path="res://scripts/title_screen.gd" id="1_ext4j"]
-[ext_resource type="AudioStream" uid="uid://b03qe8dfaj6cl" path="res://resources/titlescreen.wav" id="2_rb6de"]
+[ext_resource type="Script" path="res://title_screen.gd" id="1_5enro"]
+[ext_resource type="AudioStream" uid="uid://b03qe8dfaj6cl" path="res://resources/titlescreen.wav" id="2_ey0mn"]
 
 [node name="TitleScreen" type="Control"]
 layout_mode = 3
@@ -10,7 +10,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_ext4j")
+script = ExtResource("1_5enro")
 
 [node name="StartButton" type="Button" parent="."]
 layout_mode = 0
@@ -43,7 +43,7 @@ theme_override_font_sizes/font_size = 30
 text = "Quit"
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("2_rb6de")
+stream = ExtResource("2_ey0mn")
 volume_db = -10.0
 autoplay = true
 
