@@ -2093,6 +2093,7 @@ one_shot = true
 
 [node name="Enemy" parent="." instance=ExtResource("25_7fko2")]
 position = Vector2(171, 4)
+health = null
 
 [node name="enemy 2" parent="." instance=ExtResource("26_e1t4b")]
 position = Vector2(263, -17)

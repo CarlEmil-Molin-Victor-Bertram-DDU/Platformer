@@ -39,6 +39,13 @@ var cooldown_timer = 0.0  # Weapon cooldown timer
 
 var swing_state = 0 # 0 = not swinging, 1 = delay before hit, 2 = hitting, 3 = post-hit delay
 
+# Variables for shooting bow
+var is_shooting = false
+var shooting_timer = 0.0
+var shoot_duration = 0.2
+var cooldown_btimer = 0.0
+
+var shoot_state = 0 # 0 = not shooting, 1 = processing shot, 2 = shooting, 3 = reloading
 @export var weapon_stats = {
 	"stick": {"damage": 5, "range": 30, "attack_speed": 0.8},
 	"sword": {"damage": 10, "range": 50, "attack_speed": 1.0},
@@ -54,6 +61,7 @@ var swing_state = 0 # 0 = not swinging, 1 = delay before hit, 2 = hitting, 3 = p
 @onready var weapon_swing_particles = $Stick/WeaponSwingParticles
 @onready var animated_sprite = $AnimatedSprite2D
 @onready var stick = $Stick # Reference to the stick sprite node
+@onready var bow = $Bow # Reference to the bow sprite node
 @onready var healthbar = $Healthbar
 @onready var damage_numbers_origin = $DamageNumbers
 
@@ -73,6 +81,9 @@ func _input(event):
 	# Check for weapon swing (e.g., pressing spacebar)
 	if event.is_action_pressed("ui_attack"):
 		swing_weapon()
+	
+	if event.is_action_pressed("ui_shoot"):
+		shoot_bow()
 	
 	if event.is_action_pressed("ui_accept"):
 		for i in range(7):  # Loop to create 7 instances
@@ -108,6 +119,17 @@ func swing_weapon():
 
 		# Set the cooldown timer based on the weapon's attack speed
 		cooldown_timer = weapon_stats[weapon].attack_speed
+func shoot_bow():
+	# Check if shooting
+	print("shooting bow")
+	if not is_shooting and cooldown_btimer <= 0:
+		is_shooting = true
+		shoot_state = 1
+
+		# Ensure the bow reference is not null before setting visibility
+		if bow:
+			bow.visible = true
+
 
 func apply_damage():
 	# Placeholder logic to apply damage to enemies within range
@@ -286,7 +308,8 @@ func Health_damage(damage):
 	damage_sound.play()
 	health -= damage
 	DamageNumbers.display_number(damage, damage_numbers_origin.global_position)
-	if health <= 0:
+
+	if health >= 0:
 		attack_sound.stop()
 		blink.stop()
 		jump_sound.stop()
